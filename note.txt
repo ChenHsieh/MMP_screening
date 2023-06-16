@@ -1,0 +1,5 @@
+conda activate streamlit
+streamlit run app.py
+
+sheet_url = st.secrets["sheet_url"]
+mentors_sheet_url = st.secrets["mentors_sheet_url"]

@@ -19,11 +19,6 @@ https://github.com/ChenHsieh/MMP_screening
     }
 )
 st.title('project Tyra - Mentor Dashboard')
-# st.sidebar.markdown('''
-# # Sections
-# - [Know your mentee better](#know-your-mentee-better)
-# - [Finalize your decision](#finalize-your-decision)
-# ''', unsafe_allow_html=True)
 
 mentee_response_sheet_url = st.secrets["sheet_url"]
 mentors_sheet_url = st.secrets["mentors_sheet_url"]
@@ -43,9 +38,6 @@ mentors_table.set_index("verification_code", inplace=True)
 @st.cache_data
 def load_mentee_data(mentor_name):
     data = pd.read_csv(mentee_response_csv_export_url)
-    # lowercase = lambda x: str(x).lower()
-    # data.rename(lowercase, axis='columns', inplace=True)
-    # data["時間戳記"] = pd.to_datetime(data["時間戳記"])
     data = data.loc[
         (data["希望配對的導師（第一志願）"] == mentor_name) |
         (data["希望配對的導師（第二志願）.1"] == mentor_name) |
@@ -123,7 +115,6 @@ else:
 
 mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
 mentee_response = load_mentee_data(mentor_name)
-# data_load_state.text("Mentee's response retrieved!")
 candidate_mentee_number = mentee_response.shape[0]
 if candidate_mentee_number == 0:
     st.warning(
@@ -193,7 +184,6 @@ if viewing_mode == "Single Mentee Info":
         st.write(
             f"申請 {current_mentee['申請年份'].values[0]} {current_mentee['欲申請學位'].values[0]}")
         st.subheader("學歷資料")
-        # current_mentee['最高學歷'].values[0]
         for degree in ["學士", "碩士"]:
             if (pd.isna(current_mentee[f'{degree}就讀/畢業學校'].values[0])):
                 continue
@@ -264,11 +254,6 @@ if viewing_mode == "Single Mentee Info":
         st.caption(column)
         st.write(current_mentee[column].values[0])
 
-    # for column in display_columns:
-    #     if (pd.isna(current_mentee[column]).any()):
-    #         continue
-    #     st.subheader(column)
-    #     st.write(current_mentee[column].values[0])
 elif viewing_mode == "Multiple Mentee Info":
     st.subheader("Multiple Mentee Info")
     options = st.multiselect(

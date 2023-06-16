@@ -1,5 +1,13 @@
+
+
 conda activate streamlit
 streamlit run app.py
 
 sheet_url = st.secrets["sheet_url"]
 mentors_sheet_url = st.secrets["mentors_sheet_url"]
+
+mentee_response_sheet_url = "https://docs.google.com/spreadsheets/d/16kBkV86fkBqIoxedxIoY_rlJfRXlRKOT831fvzUv6Q4/edit#gid=1994387913"
+# mentors_sheet_url = "https://docs.google.com/spreadsheets/d/1n4JdRzUb_J97Zh6UMDDwzao2GSYfgMhfj3NKn_uLHsI/edit#gid=164489593"
+
+
+"C10 謝明修", "B39 張櫂杬"

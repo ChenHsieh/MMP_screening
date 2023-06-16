@@ -9,27 +9,34 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        'About': """
-# Find more about TYRA
+        'About': """Find more about TYRA
 https://linktr.ee/projecttyra
+
+If you find this project useful, please consider giving us a star on GitHub:
+https://github.com/ChenHsieh/MMP_screening
+
 """
     }
 )
-st.title('MMP Screening App')
+st.title('project Tyra - Mentor Dashboard')
 # st.sidebar.markdown('''
 # # Sections
 # - [Know your mentee better](#know-your-mentee-better)
 # - [Finalize your decision](#finalize-your-decision)
 # ''', unsafe_allow_html=True)
 mentee_response_sheet_url = "https://docs.google.com/spreadsheets/d/16kBkV86fkBqIoxedxIoY_rlJfRXlRKOT831fvzUv6Q4/edit#gid=1994387913"
-mentors_sheet_url = "https://docs.google.com/spreadsheets/d/1n4JdRzUb_J97Zh6UMDDwzao2GSYfgMhfj3NKn_uLHsI/edit#gid=164489593"
 
 
 mentee_response_csv_export_url = mentee_response_sheet_url.replace(
     '/edit#gid=', '/export?format=csv&gid=')
-mentors_csv_export_url = mentors_sheet_url.replace(
-    '/edit#gid=', '/export?format=csv&gid=')
-mentors = pd.read_csv(mentors_csv_export_url)
+
+
+# mentors_sheet_url = "https://docs.google.com/spreadsheets/d/1n4JdRzUb_J97Zh6UMDDwzao2GSYfgMhfj3NKn_uLHsI/edit#gid=164489593"
+# mentors_csv_export_url = mentors_sheet_url.replace(
+# '/edit#gid=', '/export?format=csv&gid=')
+# mentors_table = pd.read_csv(mentors_csv_export_url)
+mentors_table = pd.read_csv("mentors_processed.csv")
+mentors_table.set_index("verification_code", inplace=True)
 
 
 @st.cache_data
@@ -91,9 +98,30 @@ display_columns = [
 ]
 
 # TODO: modify the default value and change to the verification code system
-mentor_name = st.text_input(
+mentor_verification_code = st.text_input(
     'Please input your "verification code" from the email', '')
-# example mentor: "C10 謝明修", "B39 張櫂杬"
+
+if (mentor_verification_code == ""):
+    st.warning(
+        f"Oops! We cannot find any results for the current input. Please check your verification code.")
+    st.stop()
+elif ((mentor_verification_code in mentors_table["name"].values) | (mentor_verification_code in mentors_table["mentor_id"].values) |
+      (mentor_verification_code in mentors_table["combined_mentor_id"].values) | (mentor_verification_code in mentors_table["email"].values)):
+    st.warning(
+        f"Please input the verification code instead of personal information. Please check your verification code from the email we sent to you.")
+    st.stop()
+elif (mentor_verification_code in mentors_table.index):
+    st.success(
+        f"Hola {mentors_table.loc[mentor_verification_code]['name']}! Welcome to the mentor dashboard!")
+    f"From your record, we know that you plan to accept {mentors_table.loc[mentor_verification_code]['capacity_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['capacity_MSc']} mentees for master program."
+    f"For now, there are {mentors_table.loc[mentor_verification_code]['assigned_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['assigned_MSc']} mentees for master program interested in meeting you."
+    f"Please check the following mentee information and let us know your decision."
+else:
+    st.warning(
+        f"Oops! We cannot find any results for the current input. Please check your verification code.")
+    st.stop()
+
+mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
 mentee_response = load_mentee_data(mentor_name)
 # data_load_state.text("Mentee's response retrieved!")
 candidate_mentee_number = mentee_response.shape[0]
@@ -157,10 +185,11 @@ if viewing_mode == "Single Mentee Info":
             mentee_response["中文姓名"].values)
     current_mentee = mentee_response.loc[mentee_response["中文姓名"]
                                          == mentee_name]
-    # TODO optimize the single display mode
+
     col1, col2 = st.columns(2)
     with col1:
-        st.metric(f"選擇您為第 {current_mentee['志願序'].values[0]} 志願", current_mentee["中文姓名"].values[0])
+        st.metric(
+            f"選擇您為第 {current_mentee['志願序'].values[0]} 志願", current_mentee["中文姓名"].values[0])
         st.write(
             f"申請 {current_mentee['申請年份'].values[0]} {current_mentee['欲申請學位'].values[0]}")
         st.subheader("學歷資料")
@@ -226,8 +255,8 @@ if viewing_mode == "Single Mentee Info":
 
     st.subheader("聯絡方式")
     contact_columns = [
-    "電子郵件地址",
-    "其餘聯絡方式 (非必填)",
+        "電子郵件地址",
+        "其餘聯絡方式 (非必填)",
     ]
     for column in contact_columns:
         if (pd.isna(current_mentee[column]).any()):

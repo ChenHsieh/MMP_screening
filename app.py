@@ -95,7 +95,7 @@ mentor_verification_code = st.text_input(
 
 if (mentor_verification_code == ""):
     st.warning(
-        f"Oops! We cannot find any results for the current input. Please check your verification code.")
+        f"The input is empty!")
     st.stop()
 elif ((mentor_verification_code in mentors_table["name"].values) | (mentor_verification_code in mentors_table["mentor_id"].values) |
       (mentor_verification_code in mentors_table["combined_mentor_id"].values) | (mentor_verification_code in mentors_table["email"].values)):
@@ -110,7 +110,7 @@ elif (mentor_verification_code in mentors_table.index):
     f"Please check the following mentee information and let us know your decision."
 else:
     st.warning(
-        f"Oops! We cannot find any results for the current input. Please check your verification code.")
+        f"Oops! We cannot find any results for the current input. Please check your verification code from the email.")
     st.stop()
 
 mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]

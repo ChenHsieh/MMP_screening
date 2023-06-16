@@ -98,7 +98,6 @@ display_columns = [
     "志願序",
 ]
 
-# TODO: modify the default value and change to the verification code system
 mentor_verification_code = st.text_input(
     'Please input your "verification code" from the email', '')
 
@@ -114,7 +113,7 @@ elif ((mentor_verification_code in mentors_table["name"].values) | (mentor_verif
 elif (mentor_verification_code in mentors_table.index):
     st.success(
         f"Hola {mentors_table.loc[mentor_verification_code]['name']}! Welcome to the mentor dashboard!")
-    f"From your record, we know that you plan to accept {mentors_table.loc[mentor_verification_code]['capacity_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['capacity_MSc']} mentees for master program."
+    f"From your record, we know that you plan to accept {mentors_table.loc[mentor_verification_code]['capacity_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['capacity_MSc']} mentees for master program. You chose to {(lambda: '' if mentors_table.loc[mentor_verification_code]['review_info'] else 'not ')()} review the mentee response before making your desicion."
     f"For now, there are {mentors_table.loc[mentor_verification_code]['assigned_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['assigned_MSc']} mentees for master program interested in meeting you."
     f"Please check the following mentee information and let us know your decision."
 else:

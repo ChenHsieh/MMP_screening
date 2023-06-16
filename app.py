@@ -24,18 +24,19 @@ st.title('project Tyra - Mentor Dashboard')
 # - [Know your mentee better](#know-your-mentee-better)
 # - [Finalize your decision](#finalize-your-decision)
 # ''', unsafe_allow_html=True)
-mentee_response_sheet_url = "https://docs.google.com/spreadsheets/d/16kBkV86fkBqIoxedxIoY_rlJfRXlRKOT831fvzUv6Q4/edit#gid=1994387913"
+
+mentee_response_sheet_url = st.secrets["sheet_url"]
+mentors_sheet_url = st.secrets["mentors_sheet_url"]
 
 
 mentee_response_csv_export_url = mentee_response_sheet_url.replace(
     '/edit#gid=', '/export?format=csv&gid=')
 
 
-# mentors_sheet_url = "https://docs.google.com/spreadsheets/d/1n4JdRzUb_J97Zh6UMDDwzao2GSYfgMhfj3NKn_uLHsI/edit#gid=164489593"
-# mentors_csv_export_url = mentors_sheet_url.replace(
-# '/edit#gid=', '/export?format=csv&gid=')
-# mentors_table = pd.read_csv(mentors_csv_export_url)
-mentors_table = pd.read_csv("mentors_processed.csv")
+mentors_csv_export_url = mentors_sheet_url.replace(
+    '/edit#gid=', '/export?format=csv&gid=')
+mentors_table = pd.read_csv(mentors_csv_export_url)
+# mentors_table = pd.read_csv("mentors_processed.csv")
 mentors_table.set_index("verification_code", inplace=True)
 
 

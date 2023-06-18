@@ -55,6 +55,7 @@ def convert_df(df):
 
 
 display_columns = [
+    "志願序",
     "中文姓名",
     "最高學歷",
     "學士就讀/畢業學校",
@@ -87,7 +88,6 @@ display_columns = [
     "是否已經參加標準化入學考試？",
     "電子郵件地址",
     "其餘聯絡方式 (非必填)",
-    "志願序",
 ]
 
 mentor_verification_code = st.text_input(
@@ -257,9 +257,9 @@ if viewing_mode == "Single Mentee Info":
 elif viewing_mode == "Multiple Mentee Info":
     st.subheader("Multiple Mentee Info")
     options = st.multiselect(
-        'You can select up to 3 mentees to see compare their profiles.',
-        mentee_response["中文姓名"].values,
-        max_selections=3)
+        'You can select multiple mentees to compare their profiles.',
+        mentee_response["中文姓名"].values
+    )
 
     st.dataframe(
         mentee_response.loc[

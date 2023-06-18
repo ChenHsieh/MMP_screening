@@ -91,7 +91,7 @@ display_columns = [
 ]
 
 mentor_verification_code = st.text_input(
-    'Please input your "verification code" from the email', '')
+    'Please input your "verification code" from the email. The "verification code" is case-sensitive.', '')
 
 if (mentor_verification_code == ""):
     st.warning(

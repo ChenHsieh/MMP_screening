@@ -20,9 +20,9 @@ https://github.com/ChenHsieh/MMP_screening
 )
 st.title("project Tyra - Mentor Dashboard")
 
-mentee_response_sheet_url = st.secrets["sheet_url"]
-mentee_sheet_url = st.secrets["mentees_sheet_url"]
-mentor_sheet_url = st.secrets["mentors_sheet_url"]
+mentee_response_sheet_url = st.secrets["mentee_response_sheet_url"]
+mentee_sheet_url = st.secrets["mentee_sheet_url"]
+mentor_sheet_url = st.secrets["mentor_sheet_url"]
 
 mentee_response_sheet_url = mentee_response_sheet_url.replace(
     "/edit#gid=", "/export?format=csv&gid="

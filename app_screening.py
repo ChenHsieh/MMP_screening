@@ -22,25 +22,11 @@ https://github.com/ChenHsieh/MMP_screening
 )
 st.title('project Tyra - Mentor Dashboard')
 
-# Determine environment (local or cloud)
-environment = os.getenv("ENVIRONMENT", "local")
-
-# Set URLs based on environment
-if environment == "local":
-    # Load configuration
-    config = toml.load("config.toml")
-    mentee_response_sheet_url = config["mentee_response_sheet_url"].replace(
-        '/edit?gid=', '/export?format=csv&gid=')
-    mentee_matching_sheet_url = config["mentee_matching_sheet_url"].replace(
-        '/edit?gid=', '/export?format=csv&gid=')
-    mentor_matching_sheet_url = config["mentor_matching_sheet_url"].replace(
-        '/edit?gid=', '/export?format=csv&gid=')
-else:
-    mentee_response_sheet_url = st.secrets["mentee_response_sheet_url"].replace(
-        '/edit#gid=', '/export?format=csv&gid=')
-    mentee_matching_sheet_url = st.secrets["mentee_matching_sheet_url"].replace(
-        '/edit#gid=', '/export?format=csv&gid=')
-    mentor_matching_sheet_url = st.secrets["mentor_matching_sheet_url"].replace(
+mentee_response_sheet_url = st.secrets["mentee_response_sheet_url"].replace(
+    '/edit#gid=', '/export?format=csv&gid=')
+mentee_matching_sheet_url = st.secrets["mentee_matching_sheet_url"].replace(
+    '/edit#gid=', '/export?format=csv&gid=')
+mentor_matching_sheet_url = st.secrets["mentor_matching_sheet_url"].replace(
         '/edit#gid=', '/export?format=csv&gid=')
 
 mentees_table = pd.read_csv(mentee_matching_sheet_url)

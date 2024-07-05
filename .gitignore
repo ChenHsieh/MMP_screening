@@ -2,3 +2,4 @@ note.txt
 mentors_processed.csv
 mentors.csv
 config.toml
+.streamlit/secrets.toml

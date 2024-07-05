@@ -14,3 +14,7 @@ streamlit run app.py
 2. the app fetch the subset of the processed mentees' responses from the google sheet
 
 3. mentors can view the responses, compare, and then report to the google form
+
+
+https://docs.google.com/spreadsheets/d/1EGgLIrYuwGhjPL1kl_Qp9zoxFHglGE9Fa2cKa5MqFhQ/edit?usp=sharing
+// to be updated

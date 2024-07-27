@@ -128,7 +128,7 @@ mentee_response = load_mentee_data(mentee_id_list)
 candidate_mentee_number = mentee_response.shape[0]
 if candidate_mentee_number == 0:
     st.warning(
-        f"Oops! We cannot find any results for the current input. Please check your verification code."
+        f"Thank you for volunteering to become a mentor. Unfortunately, during the initial matching process, all available mentees interested in you were assigned to other mentors. Please stay tuned for the second phase of matching, where we hope to connect you with a mentee. Your willingness to support others is greatly appreciated."
     )
     st.stop()
 elif candidate_mentee_number == 1:

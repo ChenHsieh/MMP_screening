@@ -20,30 +20,35 @@ https://github.com/ChenHsieh/MMP_screening
 """
     }
 )
-st.title('project tyra - Mentor Dashboard 2024 initial profile review')
+st.title('project tyra - Mentor Dashboard 2024 matching confirmation')
 
 mentee_response_sheet_url = st.secrets["mentee_response_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
 mentee_matching_sheet_url = st.secrets["mentee_matching_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
 mentor_matching_sheet_url = st.secrets["mentor_matching_sheet_url"].replace(
-        '/edit?gid=', '/export?format=csv&gid=')
+    '/edit?gid=', '/export?format=csv&gid=')
+mentor_matching_result_sheet_url = st.secrets["mentor_matching_result_sheet_url"].replace(
+    '/edit?gid=', '/export?format=csv&gid=')
 
 mentees_table = pd.read_csv(mentee_matching_sheet_url)
-mentors_table = pd.read_csv(mentor_matching_sheet_url, index_col="verification_code")
+mentors_table = pd.read_csv(
+    mentor_matching_result_sheet_url, index_col="verification_code")
 
 @st.cache_data
-def load_mentee_data(mentor_name):
-    data = pd.read_csv(mentee_response_sheet_url)
-    data = data.loc[
-        (data["希望配對的導師（第一志願）"] == mentor_name) |
-        (data["希望配對的導師（第二志願）"] == mentor_name) |
-        (data["希望配對的導師（第三志願）"] == mentor_name) |
-        (data["希望配對的導師（第四志願）"] == mentor_name) |
-        (data["希望配對的導師（第五志願）"] == mentor_name)
-    ]
-    return data
+def load_mentee_data(mentee_id_list):
+    mentee_response_df = pd.read_csv(mentee_response_sheet_url)
+    mentee_matching_df = pd.read_csv(mentee_matching_sheet_url)
+    # TODO: get mentee Chinese name from mentee_matching_df
+    
+    id_to_name = dict(zip(mentee_matching_df['mentee_id'], mentee_matching_df['name_mentee']))
 
+    # Convert the list of mentee IDs to mentee names
+    mentee_names = list(map(id_to_name.get, mentee_id_list))
+
+    print(mentee_names)
+    mentee_response = mentee_response_df.loc[mentee_response_df["中文姓名"].isin(mentee_names)]
+    return mentee_response
 
 @st.cache_data
 def convert_df(df):
@@ -108,42 +113,28 @@ elif ((mentor_verification_code in mentors_table["name"].values) | (mentor_verif
     st.stop()
 elif (mentor_verification_code in mentors_table.index):
     st.success(
-        f"Hola {mentors_table.loc[mentor_verification_code]['name']}! Welcome to the mentor dashboard!")
-    f"From your record, we know that you plan to accept {mentors_table.loc[mentor_verification_code]['capacity_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['capacity_MSc']} mentees for master program. You chose to {(lambda: '' if mentors_table.loc[mentor_verification_code]['review_info'] else 'not ')()} review the mentee response before making your desicion."
-    f"For now, there are {mentors_table.loc[mentor_verification_code]['assigned_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['assigned_MSc']} mentees for master program interested in meeting you."
-    f"Please check the following mentee information and let us know your decision."
+        f"Hola {mentors_table.loc[mentor_verification_code]['name']}! Welcome to the mentor dashboard!"
+    )
 else:
     st.warning(
         f"Oops! We cannot find any results for the current input. Please check your verification code.")
     st.stop()
 
 mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
-mentee_list = mentors_table.loc[mentor_verification_code, ["MSc: no_1",
-                                                           "MSc: no_2",
-                                                           "MSc: no_3",
-                                                           "MSc: no_4",
-                                                           "MSc: no_5",
-                                                           "PhD: no_1",
-                                                           "PhD: no_2",
-                                                           "PhD: no_3",
-                                                           "PhD: no_4",
-                                                           "PhD: no_5",]]
-
-
-mentee_response = load_mentee_data(mentor_name)
+mentee_list = mentors_table.loc[mentor_verification_code, ["mentee_MSc",
+                                                           "mentee_PhD",]]
+mentee_id_list = mentee_list.str.split(" ").explode().tolist()
+mentee_response = load_mentee_data(mentee_id_list)
 candidate_mentee_number = mentee_response.shape[0]
 if candidate_mentee_number == 0:
     st.warning(
-        f"Oops! We cannot find any results for the current input. Please check your verification code.")
+        f"Oops! We cannot find any results for the current input. Please check your verification code."
+    )
     st.stop()
 elif candidate_mentee_number == 1:
-
-    st.success(
-        f"Great! {mentee_response['中文姓名'].values[0]} is interested in you!")
+    st.success(f'Great! {"、".join(mentee_response["中文姓名"].values)} matched with you!')
 else:
-
-    st.success(
-        f'You are popular! Here are the mentees who are interested in you: {"、".join(mentee_response["中文姓名"].values)}')
+    st.success(f'Great! {"、".join(mentee_response["中文姓名"].values)} matched with you!')
 
 # extract the ranking of the mentor from the mentee response
 mentee_response.loc[mentee_response["希望配對的導師（第五志願）"]
@@ -280,12 +271,14 @@ elif viewing_mode == "Multiple Mentee Info":
         height=696,
         use_container_width=True
     )
-st.divider()
+
 st.markdown("[go back to top](#know-your-mentee-better)")
-st.header("Finalize your decision")
+st.divider()
 
-f"""Please use the following Google form to let us know your decision on the mentees you want to mentor. We will let you know the final result after the matching process is done. 
+st.write("""
+Find more about TYRA
+https://linktr.ee/projecttyra
 
-If the following part is not shown, please use this link: https://forms.gle/qFgPHF4Z3GPVRngQ9"""
-components.iframe("https://forms.gle/qFgPHF4Z3GPVRngQ9",
-                  width=None, height=1069, scrolling=True)
+If you find this project useful, please consider giving us a star on GitHub:
+https://github.com/ChenHsieh/MMP_screening
+""")

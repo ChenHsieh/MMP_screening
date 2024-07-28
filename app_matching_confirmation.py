@@ -35,12 +35,10 @@ mentees_table = pd.read_csv(mentee_matching_sheet_url)
 mentors_table = pd.read_csv(
     mentor_matching_result_sheet_url, index_col="verification_code")
 
-@st.cache_data
 def load_mentee_data(mentee_id_list):
     mentee_response_df = pd.read_csv(mentee_response_sheet_url)
     mentee_matching_df = pd.read_csv(mentee_matching_sheet_url)
-    # TODO: get mentee Chinese name from mentee_matching_df
-    
+
     id_to_name = dict(zip(mentee_matching_df['mentee_id'], mentee_matching_df['name_mentee']))
 
     # Convert the list of mentee IDs to mentee names
@@ -50,7 +48,6 @@ def load_mentee_data(mentee_id_list):
     mentee_response = mentee_response_df.loc[mentee_response_df["中文姓名"].isin(mentee_names)]
     return mentee_response
 
-@st.cache_data
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv().encode('utf-8')

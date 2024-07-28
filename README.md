@@ -1,16 +1,9 @@
-# MMP_screening
-using streamlit to aid the screening process of the MMP of TYRA
+# Project Tyra MMP Mentor Dashboard
 
-# to run the app
+This project uses Streamlit to facilitate the screening process for the Mentor-Mentee Program (MMP) of Project Tyra.
 
-```
-streamlit run app.py
-```
+In the first phase, implemented in app_screening.py, mentors can view the profiles of individuals interested in matching with them and express their preferences via a Google form. In the second phase, implemented in app_matching_confirmation.py, mentors can view the profiles of the mentees who have been matched with them.
 
-## the logic of the app
+## Setup
 
-1. mentors input the verificaiton code received from the email
-
-2. the app fetch the subset of the processed mentees' responses from the google sheet
-
-3. mentors can view the responses, compare, and then report to the google form
+Mentor and mentee data are stored in Google Sheets, accessible to anyone with the link. These details are stored in .streamlit/secrets.toml, so when deployed on Streamlit Community Cloud, there is no need to modify the scripts.

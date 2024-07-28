@@ -26,8 +26,6 @@ mentee_response_sheet_url = st.secrets["mentee_response_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
 mentee_matching_sheet_url = st.secrets["mentee_matching_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
-mentor_matching_sheet_url = st.secrets["mentor_matching_sheet_url"].replace(
-    '/edit?gid=', '/export?format=csv&gid=')
 mentor_matching_result_sheet_url = st.secrets["mentor_matching_result_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
 

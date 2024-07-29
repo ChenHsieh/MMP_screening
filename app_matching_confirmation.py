@@ -1,9 +1,5 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
-import streamlit.components.v1 as components
-import toml
-import os
 
 st.set_page_config(
     page_title="MMP Screening App",
@@ -118,12 +114,11 @@ else:
     st.stop()
 
 mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
-mentee_df = mentors_table.loc[mentor_verification_code, ["mentee_MSc",
-                                                           "mentee_PhD",]]
-
-mentee_id_list = mentee_df.str.split(" ").explode().tolist()
+mentee_id_list = mentors_table.loc[mentor_verification_code, ["mentee_MSc",
+                                                           "mentee_PhD",]].dropna().str.split().explode().tolist()
 
 mentee_response = load_mentee_data(mentee_id_list)
+
 candidate_mentee_number = mentee_response.shape[0]
 
 if candidate_mentee_number == 0:

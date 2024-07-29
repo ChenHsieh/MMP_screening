@@ -47,8 +47,7 @@ def load_mentee_data(mentor_name):
 
 @st.cache_data
 def convert_df(df):
-    # IMPORTANT: Cache the conversion to prevent computation on every rerun
-    return df.to_csv().encode('utf-8')
+    return df.to_csv().encode('utf-8-sig')
 
 
 verification_code_placeholder = ''

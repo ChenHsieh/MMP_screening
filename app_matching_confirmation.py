@@ -35,15 +35,18 @@ mentors_table = pd.read_csv(
 
 def load_mentee_data(mentee_id_list):
     mentee_response_df = pd.read_csv(mentee_response_sheet_url)
+    mentee_response_df = mentee_response_df.dropna(how='all')
+    mentee_response_df["中文姓名"] = mentee_response_df["中文姓名"].apply(lambda x: x.strip() if isinstance(x, str) else x)
+
     mentee_matching_df = pd.read_csv(mentee_matching_sheet_url)
 
     id_to_name = dict(zip(mentee_matching_df['mentee_id'], mentee_matching_df['name_mentee']))
 
     # Convert the list of mentee IDs to mentee names
     mentee_names = list(map(id_to_name.get, mentee_id_list))
-
-    print(mentee_names)
+    
     mentee_response = mentee_response_df.loc[mentee_response_df["中文姓名"].isin(mentee_names)]
+    
     return mentee_response
 
 def convert_df(df):
@@ -115,11 +118,14 @@ else:
     st.stop()
 
 mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
-mentee_list = mentors_table.loc[mentor_verification_code, ["mentee_MSc",
+mentee_df = mentors_table.loc[mentor_verification_code, ["mentee_MSc",
                                                            "mentee_PhD",]]
-mentee_id_list = mentee_list.str.split(" ").explode().tolist()
+
+mentee_id_list = mentee_df.str.split(" ").explode().tolist()
+
 mentee_response = load_mentee_data(mentee_id_list)
 candidate_mentee_number = mentee_response.shape[0]
+
 if candidate_mentee_number == 0:
     st.warning(
         f"Thank you for volunteering to become a mentor. Unfortunately, during the initial matching process, all available mentees interested in you were assigned to other mentors. Please stay tuned for the second phase of matching, where we hope to connect you with a mentee. Your willingness to support others is greatly appreciated."
@@ -131,16 +137,13 @@ else:
     st.success(f'Great! {"、".join(mentee_response["中文姓名"].values)} matched with you!')
 
 # extract the ranking of the mentor from the mentee response
-mentee_response.loc[mentee_response["希望配對的導師（第五志願）"]
-                    == mentor_name, "志願序"] = "5"
-mentee_response.loc[mentee_response["希望配對的導師（第四志願）"]
-                    == mentor_name, "志願序"] = "4"
-mentee_response.loc[mentee_response["希望配對的導師（第三志願）"]
-                    == mentor_name, "志願序"] = "3"
-mentee_response.loc[mentee_response["希望配對的導師（第二志願）"]
-                    == mentor_name, "志願序"] = "2"
-mentee_response.loc[mentee_response["希望配對的導師（第一志願）"]
-                    == mentor_name, "志願序"] = "1"
+# extract the ranking of the mentor from the mentee response
+mentee_response.loc[mentee_response["希望配對的導師（第五志願）"] == mentor_name, "志願序"] = 5
+mentee_response.loc[mentee_response["希望配對的導師（第四志願）"] == mentor_name, "志願序"] = 4
+mentee_response.loc[mentee_response["希望配對的導師（第三志願）"] == mentor_name, "志願序"] = 3
+mentee_response.loc[mentee_response["希望配對的導師（第二志願）"] == mentor_name, "志願序"] = 2
+mentee_response.loc[mentee_response["希望配對的導師（第一志願）"] == mentor_name, "志願序"] = 1
+
 
 # filter the columns to be shown
 mentee_response = mentee_response[display_columns].sort_values(by="志願序")

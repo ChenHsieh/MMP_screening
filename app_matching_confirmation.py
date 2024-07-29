@@ -178,8 +178,12 @@ if viewing_mode == "Single Mentee Info":
 
     col1, col2 = st.columns(2)
     with col1:
-        st.metric(
-            f"選擇您為第 {current_mentee['志願序'].values[0]} 志願", current_mentee["中文姓名"].values[0])
+        # Ensure the '志願序' value is converted to an integer
+        preference_order = int(current_mentee['志願序'].values[0])
+
+        # Display the metric with the integer value
+        st.metric(f"選擇您為第 {preference_order} 志願", current_mentee["中文姓名"].values[0])
+
         st.write(
             f"申請 {current_mentee['申請年份'].values[0]} {current_mentee['欲申請學位'].values[0]}")
         st.subheader("學歷資料")

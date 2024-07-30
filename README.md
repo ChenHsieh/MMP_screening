@@ -9,7 +9,7 @@ sequenceDiagram
 	link project tyra: website @ https://sites.google.com/view/projecttyra/home
 	Mentor ->> project tyra: sign up
     Mentee ->> project tyra: express mentors of interest
-    project tyra -> Mentor: initial profile review
+    project tyra ->> Mentor: initial profile review
     Mentor -->> Mentee: brief interview
     Mentor ->>+ project tyra: submit decision
     Note over project tyra: matching algorithm

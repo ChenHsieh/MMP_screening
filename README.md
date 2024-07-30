@@ -4,6 +4,10 @@ This project uses Streamlit to facilitate the screening process for the Mentor-M
 
 In the first phase, implemented in `app_screening.py`, mentors can view the profiles of individuals interested in matching with them and express their preferences via a Google form. In the second phase, implemented in `app_matching_confirmation.py`, mentors can view the profiles of the mentees who have been matched with them.
 
+## MMP program overview
+
+Here is how MMP matching work. This project assists the delivery of mentee's information to mentors in the `initial profile review` and `matching confirmation` phase.
+
 ```mermaid
 sequenceDiagram
 	link project tyra: website @ https://sites.google.com/view/projecttyra/home

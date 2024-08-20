@@ -6,7 +6,7 @@ import toml
 import os
 
 st.set_page_config(
-    page_title="MMP Screening App",
+    page_title="TYRA MMP 2024 round 2",
     page_icon="⛵️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -20,7 +20,20 @@ https://github.com/ChenHsieh/MMP_screening
 """
     }
 )
-st.title('project tyra - Mentor Dashboard 2024 initial profile review')
+st.title('project tyra - Mentor Dashboard 2024 initial profile review (round 2)')
+
+st.markdown("""
+Thank you for participating as a mentor in the TYRA MMP 2024 program. This dashboard allows you to review the profiles of mentees who have expressed interest in working with you. Please follow the instructions below to begin the review process.
+""")
+
+st.markdown("""
+### How to Use This Dashboard
+1. **Enter your verification code**: You received this code via email. Please note that it is case-sensitive.
+2. **Review Mentee Profiles**: After entering your code, you will be able to see the profiles of mentees who are interested in working with you. You can view detailed information and compare multiple profiles.
+3. **Make Your Decision**: Once you have reviewed the profiles, please use the Google form at the bottom of the page to submit your final decision on which mentees you would like to mentor.
+""")
+
+
 
 mentee_response_sheet_url = st.secrets["mentee_response_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
@@ -89,7 +102,7 @@ display_columns = [
     "目前的生涯規劃，或主要申請目的與動機（選填）",
     "您認為可能會影響申請過程或結果的身份、背景、經歷，而您希望導師知道的（選填）",
 
-    "Email Address",
+    "電子郵件地址",
     "其餘聯絡方式 (非必填)",
 ]
 
@@ -100,20 +113,15 @@ if (mentor_verification_code == ""):
     st.warning(
         f"The input is empty!")
     st.stop()
-elif ((mentor_verification_code in mentors_table["name"].values) | (mentor_verification_code in mentors_table["mentor_id"].values) |
-      (mentor_verification_code in mentors_table["combined_mentor_id"].values) | (mentor_verification_code in mentors_table["email"].values)):
-    st.warning(
-        f"Please input the verification code instead of personal information. Please check your verification code from the email we sent to you.")
-    st.stop()
 elif (mentor_verification_code in mentors_table.index):
     st.success(
         f"Hola {mentors_table.loc[mentor_verification_code]['name']}! Welcome to the mentor dashboard!")
-    f"From your record, we know that you plan to accept {mentors_table.loc[mentor_verification_code]['capacity_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['capacity_MSc']} mentees for master program. You chose to {(lambda: '' if mentors_table.loc[mentor_verification_code]['review_info'] else 'not ')()} review the mentee response before making your desicion."
-    f"For now, there are {mentors_table.loc[mentor_verification_code]['assigned_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['assigned_MSc']} mentees for master program interested in meeting you."
+    # f"From your record, we know that you plan to accept {mentors_table.loc[mentor_verification_code]['capacity_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['capacity_MSc']} mentees for master program. You chose to {(lambda: '' if mentors_table.loc[mentor_verification_code]['review_info'] else 'not ')()} review the mentee response before making your desicion."
+    # f"For now, there are {mentors_table.loc[mentor_verification_code]['assigned_PhD']} mentees for PhD program and {mentors_table.loc[mentor_verification_code]['assigned_MSc']} mentees for master program interested in meeting you."
     f"Please check the following mentee information and let us know your decision."
 else:
     st.warning(
-        f"Oops! We cannot find any results for the current input. Please check your verification code.")
+        f"Oops! We cannot find any results for the current input. Please check your verification code or contact via email for support.")
     st.stop()
 
 mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
@@ -257,7 +265,7 @@ if viewing_mode == "Single Mentee Info":
 
     st.subheader("聯絡方式")
     contact_columns = [
-        "Email Address",
+        "電子郵件地址",
         "其餘聯絡方式 (非必填)",
     ]
     for column in contact_columns:
@@ -285,6 +293,16 @@ st.header("Finalize your decision")
 
 f"""Please use the following Google form to let us know your decision on the mentees you want to mentor. We will let you know the final result after the matching process is done. 
 
-If the following part is not shown, please use this link: https://forms.gle/qFgPHF4Z3GPVRngQ9"""
-components.iframe("https://forms.gle/qFgPHF4Z3GPVRngQ9",
+If the following part is not shown, please use this link: https://forms.gle/LgEinP8MUT8FWosh6"""
+components.iframe("https://forms.gle/LgEinP8MUT8FWosh6",
                   width=None, height=1069, scrolling=True)
+
+st.divider()
+
+st.write("""
+Find more about TYRA
+https://linktr.ee/projecttyra
+
+If you find this project useful, please consider giving us a star on GitHub:
+https://github.com/ChenHsieh/MMP_screening
+""")

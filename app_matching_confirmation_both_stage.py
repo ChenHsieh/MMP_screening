@@ -87,7 +87,7 @@ def convert_df(df):
     return df.to_csv().encode('utf-8-sig')
 
 
-verification_code_placeholder = 'Yds0PJbpIE'
+verification_code_placeholder = ''
 
 display_columns = [
     "志願序",

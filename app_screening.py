@@ -11,10 +11,9 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        'About': """Find more about TYRA
-https://linktr.ee/projecttyra
+        'About': """Learn more about the Project TYRA: https://linktr.ee/projecttyra
 
-If you find this project useful, please consider giving us a star on GitHub:
+If you find this work valuable, please star our GitHub repository:
 https://github.com/ChenHsieh/MMP_screening
 
 """
@@ -305,9 +304,8 @@ components.iframe("https://forms.gle/kPwwoNA8PKRxoudB9",
 st.divider()
 
 st.write("""
-Find more about TYRA
-https://linktr.ee/projecttyra
+Learn more about the Project TYRA: https://linktr.ee/projecttyra
 
-If you find this project useful, please consider giving us a star on GitHub:
+If you find this work valuable, please star our GitHub repository:
 https://github.com/ChenHsieh/MMP_screening
 """)

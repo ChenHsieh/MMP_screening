@@ -6,7 +6,7 @@ import toml
 import os
 
 st.set_page_config(
-    page_title="TYRA MMP 2024 round 2",
+    page_title="TYRA MMP 2025 init",
     page_icon="⛵️",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -20,7 +20,7 @@ https://github.com/ChenHsieh/MMP_screening
 """
     }
 )
-st.title('project tyra - Mentor Dashboard 2025 initial profile review')
+st.title('Project TYRA - Mentor Dashboard 2025 initial profile review')
 
 st.markdown("""
 Thank you for participating as a mentor in the TYRA MMP 2025 program. This dashboard allows you to review the profiles of mentees who have expressed interest in working with you. Please follow the instructions below to begin the review process.

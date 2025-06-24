@@ -20,10 +20,10 @@ https://github.com/ChenHsieh/MMP_screening
 """
     }
 )
-st.title('project tyra - Mentor Dashboard 2024 initial profile review (round 2)')
+st.title('project tyra - Mentor Dashboard 2025 initial profile review')
 
 st.markdown("""
-Thank you for participating as a mentor in the TYRA MMP 2024 program. This dashboard allows you to review the profiles of mentees who have expressed interest in working with you. Please follow the instructions below to begin the review process.
+Thank you for participating as a mentor in the TYRA MMP 2025 program. This dashboard allows you to review the profiles of mentees who have expressed interest in working with you. Please follow the instructions below to begin the review process.
 """)
 
 st.markdown("""
@@ -34,20 +34,22 @@ st.markdown("""
 """)
 
 
-
 mentee_response_sheet_url = st.secrets["mentee_response_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
-mentee_matching_sheet_url = st.secrets["mentee_matching_sheet_url"].replace(
+mentee_matching_sheet_url = st.secrets["mentee_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
-mentor_matching_sheet_url = st.secrets["mentor_matching_sheet_url"].replace(
-        '/edit?gid=', '/export?format=csv&gid=')
+mentor_matching_sheet_url = st.secrets["mentor_sheet_url"].replace(
+    '/edit?gid=', '/export?format=csv&gid=')
 
 mentees_table = pd.read_csv(mentee_matching_sheet_url)
-mentors_table = pd.read_csv(mentor_matching_sheet_url, index_col="verification_code")
+mentors_table = pd.read_csv(
+    mentor_matching_sheet_url, index_col="verification_code")
+
 
 @st.cache_data
 def load_mentee_data(mentor_name):
     data = pd.read_csv(mentee_response_sheet_url)
+    
     data = data.loc[
         (data["希望配對的導師（第一志願）"] == mentor_name) |
         (data["希望配對的導師（第二志願）"] == mentor_name) |
@@ -55,6 +57,7 @@ def load_mentee_data(mentor_name):
         (data["希望配對的導師（第四志願）"] == mentor_name) |
         (data["希望配對的導師（第五志願）"] == mentor_name)
     ]
+    
     return data
 
 
@@ -125,19 +128,20 @@ else:
     st.stop()
 
 mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
-mentee_list = mentors_table.loc[mentor_verification_code, ["MSc: no_1",
-                                                           "MSc: no_2",
-                                                           "MSc: no_3",
-                                                           "MSc: no_4",
-                                                           "MSc: no_5",
-                                                           "PhD: no_1",
-                                                           "PhD: no_2",
-                                                           "PhD: no_3",
-                                                           "PhD: no_4",
-                                                           "PhD: no_5",]]
+# mentee_list = mentors_table.loc[mentor_verification_code, ["MSc: no_1",
+#                                                            "MSc: no_2",
+#                                                            "MSc: no_3",
+#                                                            "MSc: no_4",
+#                                                            "MSc: no_5",
+#                                                            "PhD: no_1",
+#                                                            "PhD: no_2",
+#                                                            "PhD: no_3",
+#                                                            "PhD: no_4",
+#                                                            "PhD: no_5",]]
 
 
 mentee_response = load_mentee_data(mentor_name)
+
 candidate_mentee_number = mentee_response.shape[0]
 if candidate_mentee_number == 0:
     st.warning(

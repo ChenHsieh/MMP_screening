@@ -3,3 +3,6 @@ mentors_processed.csv
 mentors.csv
 config.toml
 .streamlit/secrets.toml
+.DS_Store
+data/*
+

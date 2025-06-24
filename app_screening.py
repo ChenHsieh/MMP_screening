@@ -291,8 +291,9 @@ elif viewing_mode == "Multiple Mentee Info":
         height=696,
         use_container_width=True
     )
-st.divider()
 st.markdown("[go back to top](#know-your-mentee-better)")
+st.divider()
+
 st.header("Finalize your decision")
 
 f"""Please use the following Google form to let us know your decision on the mentees you want to mentor. We will let you know the final result after the matching process is done. 

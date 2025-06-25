@@ -144,7 +144,7 @@ mentee_response = load_mentee_data(mentor_name)
 candidate_mentee_number = mentee_response.shape[0]
 if candidate_mentee_number == 0:
     st.warning(
-        f"Oops! We cannot find any results for the current input. Please check your verification code.")
+        f"Oops! We cannot find any results for the current input.")
     st.stop()
 elif candidate_mentee_number == 1:
 

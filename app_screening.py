@@ -144,7 +144,12 @@ mentee_response = load_mentee_data(mentor_name)
 candidate_mentee_number = mentee_response.shape[0]
 if candidate_mentee_number == 0:
     st.warning(
-        f"Oops! We cannot find any results for the current input.")
+        f"""Thank you for volunteering your time and expertise as a mentor.
+At this moment, no mentees have selected you for this round.
+
+Please don't be discouraged — your willingness to support the next generation means a lot to us and to the community. We'll notify you if new opportunities arise or when the next round begins.
+
+Stay tuned, and thank you again for being part of this journey.""")
     st.stop()
 elif candidate_mentee_number == 1:
 

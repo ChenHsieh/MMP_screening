@@ -24,12 +24,13 @@ sequenceDiagram
 	link project tyra: website @ https://sites.google.com/view/projecttyra/home
 	Mentor ->> project tyra: sign up
     Mentee ->> project tyra: express mentors of interest
-    project tyra ->> Mentor: initial profile review
+    project tyra ->> Mentor: notification email
+    Note over Mentor: initial profile review
     Mentor -->> Mentee: brief interview
-    Mentor ->>+ project tyra: submit decision
+    Mentor ->>+ project tyra: reply decision
     Note over project tyra: matching algorithm
     project tyra ->>- Mentor: matching confirmation
-    Mentor ->> Mentee: contact for further communication
+    Mentor ->> Mentee: contact for further mentoring
 ```
 ## Features of the Mentor Dashboard
 

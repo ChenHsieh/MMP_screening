@@ -25,7 +25,7 @@ sequenceDiagram
 	Mentor ->> project tyra: sign up
     Mentee ->> project tyra: express mentors of interest
     project tyra ->> Mentor: notification email
-    Note over Mentor: initial profile review
+    Note over Mentor: initial profile review with this app
     Mentor -->> Mentee: brief interview
     Mentor ->>+ project tyra: reply decision
     Note over project tyra: matching algorithm

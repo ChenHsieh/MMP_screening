@@ -24,17 +24,11 @@ st.title('project tyra - Mentor Dashboard 2025 matching confirmation')
 st.markdown("""
 ### How to Use This Dashboard
 
-Choose one of the two authentication methods:
+1. **Enter your verification code**  
+   You should have received this code via email. Please enter it exactly as provided — it is case-sensitive.
 
-**Option 1: Verification Code Login** 🔑
-- Use the verification code sent to you via email
-- Enter it exactly as provided (case-sensitive)
-
-**Option 2: Email OTP Login** 📧  
-- Use your registered email address
-- We'll send you a 6-digit code to verify your identity
-
-After successful authentication, you'll be able to view your assigned mentees and access the mentorship dashboard.
+2. **Review your match and begin your mentorship**  
+   After verification, you'll be able to view your assigned mentees and proceed with the next steps.
 """)
 
 # Load secrets

@@ -24,17 +24,11 @@ st.title('project tyra - Mentor Dashboard 2025 matching confirmation')
 st.markdown("""
 ### How to Use This Dashboard
 
-Choose one of the two authentication methods:
+1. **Enter your verification code**  
+   You should have received this code via email. Please enter it exactly as provided — it is case-sensitive.
 
-**Option 1: Verification Code Login** 🔑
-- Use the verification code sent to you via email
-- Enter it exactly as provided (case-sensitive)
-
-**Option 2: Email OTP Login** 📧  
-- Use your registered email address
-- We'll send you a 6-digit code to verify your identity
-
-After successful authentication, you'll be able to view your assigned mentees and access the mentorship dashboard.
+2. **Review your match and begin your mentorship**  
+   After verification, you'll be able to view your assigned mentees and proceed with the next steps.
 """)
 
 # Load secrets
@@ -128,152 +122,100 @@ display_columns = [
     "Email Address",
     "其餘聯絡方式 (非必填)",
 ]
-# Initialize session state for authentication
-if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
-if "mentor_name" not in st.session_state:
-    st.session_state.mentor_name = None
-if "mentee_id_list" not in st.session_state:
-    st.session_state.mentee_id_list = []
+verification_code_login_col, OTP_col = st.columns(2)
 
-# Check if user is already authenticated
-if not st.session_state.authenticated:
-    st.markdown("### Please choose your login method:")
-    
-    verification_code_login_col, OTP_col = st.columns(2)
+with OTP_col:
+    st.markdown("## Email OTP login")
 
-    with verification_code_login_col:
-        st.markdown("## 🔑 Verification Code Login")
-        st.markdown("*Use the verification code sent via email*")
-        
-        mentor_verification_code = st.text_input(
-            'Enter your verification code (case-sensitive):',
-            key="verification_code_input"
-        )
 
-        if st.button("Login with Verification Code", key="verify_login"):
-            if mentor_verification_code == "":
-                st.warning("Please enter your verification code!")
-            elif mentor_verification_code in mentors_table.index:
-                # Set session state for successful verification code login
-                st.session_state.authenticated = True
-                st.session_state.login_method = "verification_code"
-                st.session_state.mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
-                st.session_state.mentee_id_list = mentors_table.loc[mentor_verification_code, ["mentee_MSc", "mentee_PhD"]].dropna().str.split().explode().tolist()
-                st.session_state.mentor_data = mentors_table.loc[mentor_verification_code]
-                
-                st.success(f"✅ Welcome {mentors_table.loc[mentor_verification_code]['name']}!")
-                st.rerun()
-            else:
-                st.error("❌ Invalid verification code. Please check and try again.")
-
-    with OTP_col:
-        st.markdown("## 📧 Email OTP Login")
-        st.markdown("*Use your registered email address*")
-
-        if "email" not in st.session_state:
-            with st.form("email_form", clear_on_submit=True):
-                email = st.text_input("📧 Enter your registered email")
-                submitted = st.form_submit_button("Send Login Code")
-                if submitted and email:
-                    # Check if email exists in mentors table
-                    email_filter = (mentors_table["email"] == email) | (mentors_table["email2"] == email)
-                    if not email_filter.any():
-                        st.error("❌ Email not found in our records. Please use your registered email.")
-                    else:
-                        res = requests.post(
-                            f"https://{AUTH0_DOMAIN}/passwordless/start",
-                            json={
-                                "client_id": AUTH0_CLIENT_ID,
-                                "connection": "email",
-                                "email": email,
-                                "send": "code"
-                            }
-                        )
-                        if res.status_code == 200:
-                            st.success("✅ Check your inbox for the 6-digit code.")
-                            st.session_state["email"] = email
-                            st.session_state["email_sent_time"] = time.time()
-                            st.rerun()
-                        else:
-                            st.error("❌ Failed to send code. Please try again.")
-
-        elif "user" not in st.session_state:
-            if time.time() - st.session_state.get("email_sent_time", 0) > 300:
-                st.warning("⏰ Code expired. Please request a new one.")
-                if st.button("Request New Code", key="resend_code"):
-                    del st.session_state["email"]
+    if "email" not in st.session_state:
+        with st.form("email_form", clear_on_submit=True):
+            email = st.text_input("📧 Enter your email")
+            submitted = st.form_submit_button("Send Login Code")
+            if submitted and email:
+                res = requests.post(
+                    f"https://{AUTH0_DOMAIN}/passwordless/start",
+                    json={
+                        "client_id": AUTH0_CLIENT_ID,
+                        "connection": "email",
+                        "email": email,
+                        "send": "code"
+                    }
+                )
+                if res.status_code == 200:
+                    st.success("✅ Check your inbox for the code.")
+                    st.session_state["email"] = email
+                    st.session_state["email_sent_time"] = time.time()
                     st.rerun()
-            else:
-                remaining_time = 300 - int(time.time() - st.session_state.get("email_sent_time", 0))
-                st.info(f"⏳ Code expires in {remaining_time} seconds")
-                
-                code = st.text_input("🔢 Enter the 6-digit code", key="otp_input")
-                if st.button("Verify OTP", key="verify_otp"):
-                    if code:
-                        res = requests.post(
-                            f"https://{AUTH0_DOMAIN}/oauth/token",
-                            json={
-                                "grant_type": "http://auth0.com/oauth/grant-type/passwordless/otp",
-                                "client_id": AUTH0_CLIENT_ID,
-                                "client_secret": AUTH0_CLIENT_SECRET,
-                                "username": st.session_state["email"],
-                                "otp": code,
-                                "realm": "email",
-                                "scope": "openid profile email"
-                            }
-                        )
-                        if res.status_code == 200:
-                            token = res.json().get("access_token")
-                            st.session_state["user"] = get_user_info(token)
-                            st.rerun()
-                        else:
-                            st.error("❌ Invalid code. Please try again.")
-                    else:
-                        st.warning("Please enter the 6-digit code.")
+                else:
+                    st.error("❌ Failed to send code.")
 
-        if "user" in st.session_state:
-            user = st.session_state["user"]
-            mentor_email = user.get('email', '')
-            
-            user_filter = (mentors_table["email"] == mentor_email) | (mentors_table["email2"] == mentor_email)
-            
-            if user_filter.any():
-                # Set session state for successful OTP login
-                st.session_state.authenticated = True
-                st.session_state.login_method = "email_otp"
-                st.session_state.mentor_name = mentors_table.loc[user_filter, "combined_mentor_id"].values[0]
-                st.session_state.mentor_data = mentors_table.loc[user_filter].iloc[0]
-                
-                mentee_id_list = []
-                for col in ["mentee_MSc", "mentee_PhD"]:
-                    mentee_ids = mentors_table.loc[user_filter, col].dropna().astype(str).str.split()
-                    mentee_id_list.extend(mentee_ids.explode().tolist())
-                
-                st.session_state.mentee_id_list = mentee_id_list
-                
-                st.success(f"✅ Welcome {st.session_state.mentor_data['name']}!")
+    elif "user" not in st.session_state:
+        if time.time() - st.session_state.get("email_sent_time", 0) > 300:
+            st.warning("⏰ Session expired.")
+            if st.button("Resend Code"):
+                del st.session_state["email"]
+                st.rerun()
+            st.stop()
+        code = st.text_input("🔢 Enter the 6-digit code")
+        if code:
+            res = requests.post(
+                f"https://{AUTH0_DOMAIN}/oauth/token",
+                json={
+                    "grant_type": "http://auth0.com/oauth/grant-type/passwordless/otp",
+                    "client_id": AUTH0_CLIENT_ID,
+                    "client_secret": AUTH0_CLIENT_SECRET,
+                    "username": st.session_state["email"],
+                    "otp": code,
+                    "realm": "email",
+                    "scope": "openid profile email"
+                }
+            )
+            if res.status_code == 200:
+                token = res.json().get("access_token")
+                st.session_state["user"] = get_user_info(token)
                 st.rerun()
             else:
-                st.error("❌ Your email is not registered as a mentor.")
-                st.session_state.clear()
+                st.error("❌ Invalid code.")
 
-    st.stop()
-
-# User is authenticated - show logout option and continue with app
-else:
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col3:
-        if st.button("🚪 Logout", key="logout_button"):
+    if "user" in st.session_state:
+        user = st.session_state["user"]
+        mentor_email = user.get('email', '')
+        
+        user_filter = (mentors_table["email"] == mentor_email) | (mentors_table["email2"] == mentor_email)
+        mentor_name = mentors_table.loc[user_filter, "combined_mentor_id"].values[0]
+        mentee_id_list = []
+        for col in ["mentee_MSc", "mentee_PhD"]:
+            mentee_ids = mentors_table.loc[user_filter, col].dropna().astype(str).str.split()
+            mentee_id_list.extend(mentee_ids.explode().tolist())
+        mentee_id_list
+        if st.button("Log out"):
             st.session_state.clear()
             st.rerun()
-    
-    st.success(f"👋 Welcome back, {st.session_state.mentor_data['name']}!")
-    st.info(f"🔐 Logged in via: {st.session_state.login_method.replace('_', ' ').title()}")
-    
-    # Set variables for the rest of the app
-    mentor_name = st.session_state.mentor_name
-    mentee_id_list = st.session_state.mentee_id_list
+
+
+with verification_code_login_col:
+    st.markdown("## Input your verification code")
+    mentor_verification_code = st.text_input(
+        'Please note that the "verification code" is case-sensitive.', verification_code_placeholder)
+
+    if (mentor_verification_code == ""):
+        st.warning(
+            f"The input is empty!")
+        st.stop()
+    elif (mentor_verification_code in mentors_table.index):
+        st.success(
+            f"Hola {mentors_table.loc[mentor_verification_code]['name']}! Welcome to the mentor dashboard!"
+        )
+    else:
+        st.warning(
+            f"Oops! We cannot find any results for the current input. Please check your verification code.")
+        st.stop()
+
+    mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
+
+    mentee_id_list = mentors_table.loc[mentor_verification_code, ["mentee_MSc",
+                                                                "mentee_PhD",]].dropna().str.split().explode().tolist()
 mentee_response = load_mentee_data(mentee_id_list)
 
 candidate_mentee_number = mentee_response.shape[0]

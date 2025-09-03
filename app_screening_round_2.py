@@ -103,7 +103,7 @@ display_columns = [
     "目前的生涯規劃，或主要申請目的與動機（選填）",
     "您認為可能會影響申請過程或結果的身份、背景、經歷，而您希望導師知道的（選填）",
 
-    "電子郵件地址",
+    "E-mail",
     "其餘聯絡方式 (非必填)",
 ]
 
@@ -126,16 +126,16 @@ else:
     st.stop()
 
 mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
-# mentee_list = mentors_table.loc[mentor_verification_code, ["MSc: no_1",
-#                                                            "MSc: no_2",
-#                                                            "MSc: no_3",
-#                                                            "MSc: no_4",
-#                                                            "MSc: no_5",
-#                                                            "PhD: no_1",
-#                                                            "PhD: no_2",
-#                                                            "PhD: no_3",
-#                                                            "PhD: no_4",
-#                                                            "PhD: no_5",]]
+mentee_list = mentors_table.loc[mentor_verification_code, ["MSc: no_1",
+                                                           "MSc: no_2",
+                                                           "MSc: no_3",
+                                                           "MSc: no_4",
+                                                           "MSc: no_5",
+                                                           "PhD: no_1",
+                                                           "PhD: no_2",
+                                                           "PhD: no_3",
+                                                           "PhD: no_4",
+                                                           "PhD: no_5",]]
 
 
 mentee_response = load_mentee_data(mentor_name)
@@ -272,7 +272,7 @@ if viewing_mode == "Single Mentee Info":
 
     st.subheader("聯絡方式")
     contact_columns = [
-        "電子郵件地址",
+        "E-mail",
         "其餘聯絡方式 (非必填)",
     ]
     for column in contact_columns:

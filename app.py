@@ -18,7 +18,7 @@ https://github.com/ChenHsieh/MMP_screening
 """
     },
 )
-st.title("project Tyra - Mentor Dashboard")
+st.title("Project TYRA - Mentor Dashboard")
 
 mentee_response_sheet_url = st.secrets["mentee_response_sheet_url"]
 mentee_sheet_url = st.secrets["mentee_sheet_url"]

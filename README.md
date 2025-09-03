@@ -1,12 +1,12 @@
-# Project Tyra MMP Mentor Dashboard
+# Project TYRA MMP Mentor Dashboard
 
-This project uses Streamlit to facilitate the screening and matching process for the Mentor-Mentee Program (MMP) of Project Tyra.
+This project uses Streamlit to facilitate the screening and matching process for the Mentor-Mentee Program (MMP) of Project TYRA.
 
 In the first phase, implemented in app_screening.py, mentors can view the profiles of individuals interested in matching with them and express their preferences via a Google Form. In the second phase, implemented in app_matching_confirmation.py, mentors can view the profiles of the mentees who have been matched with them.
 
 <div>
     <a href="https://www.loom.com/share/086b4b11ba1542a58984ac8e408e4d2f">
-      <p>Project Tyra Mentor Dashboard Overview 🚀 - Watch Video</p>
+      <p>Project TYRA Mentor Dashboard Overview 🚀 - Watch Video</p>
     </a>
     <a href="https://www.loom.com/share/086b4b11ba1542a58984ac8e408e4d2f">
       <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/086b4b11ba1542a58984ac8e408e4d2f-aba1bdfa54ea4fef-full-play.gif">
@@ -21,15 +21,15 @@ The MMP matching process consists of two phases: the initial profile review and 
 
 ```mermaid
 sequenceDiagram
-	link project tyra: website @ https://sites.google.com/view/projecttyra/home
-	Mentor ->> project tyra: sign up
-    Mentee ->> project tyra: express mentors of interest
-    project tyra ->> Mentor: notification email
+	link Project TYRA: website @ https://sites.google.com/view/projecttyra/home
+	Mentor ->> Project TYRA: sign up
+    Mentee ->> Project TYRA: express mentors of interest
+    Project TYRA ->> Mentor: notification email
     Note over Mentor: initial profile review with this app
     Mentor -->> Mentee: brief interview
-    Mentor ->>+ project tyra: reply decision
-    Note over project tyra: matching algorithm
-    project tyra ->>- Mentor: matching confirmation
+    Mentor ->>+ Project TYRA: reply decision
+    Note over Project TYRA: matching algorithm
+    Project TYRA ->>- Mentor: matching confirmation
     Mentor ->> Mentee: contact for further mentoring
 ```
 ## Features of the Mentor Dashboard

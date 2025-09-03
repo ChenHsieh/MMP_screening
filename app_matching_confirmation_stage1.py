@@ -18,7 +18,7 @@ https://github.com/ChenHsieh/MMP_screening
 """
     }
 )
-st.title('project tyra - Mentor Dashboard 2025 matching confirmation')
+st.title('Project TYRA - Mentor Dashboard 2025 matching confirmation')
 
 
 st.markdown("""

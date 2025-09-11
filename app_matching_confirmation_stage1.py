@@ -197,7 +197,7 @@ with OTP_col:
 with verification_code_login_col:
     st.markdown("## Input your verification code")
     mentor_verification_code = st.text_input(
-        'Please note that the "verification code" is case-sensitive.', verification_code_placeholder)
+        'Please note that the "verification code" is case-sensitive.', verification_code_placeholder).strip()
 
     if (mentor_verification_code == ""):
         st.warning(

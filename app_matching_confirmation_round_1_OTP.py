@@ -143,7 +143,7 @@ if not st.session_state.authenticated:
         mentor_verification_code = st.text_input(
             'Enter your verification code (case-sensitive):',
             key="verification_code_input"
-        )
+        ).strip()
 
         if st.button("Login with Verification Code", key="verify_login"):
             if mentor_verification_code == "":

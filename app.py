@@ -87,7 +87,7 @@ display_columns = [
 mentor_verification_code = st.text_input(
     'Please input your latest "verification code" from the email. Please note that the "verification code" is case-sensitive.',
     "",
-)
+).strip()
 
 if mentor_verification_code == "":
     st.warning(f"The input is empty!")

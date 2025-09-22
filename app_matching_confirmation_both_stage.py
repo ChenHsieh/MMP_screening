@@ -36,20 +36,6 @@ mentee_response_stage2_sheet_url = st.secrets["mentee_response_stage2_sheet_url"
     '/edit?gid=', '/export?format=csv&gid=')
 mentor_matching_result_both_stage_sheet_url = st.secrets["mentor_matching_result_both_stage_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
-
-
-# mentee_matching_sheet_url = st.secrets["mentee_matching_sheet_url"].replace(
-#     '/edit?gid=', '/export?format=csv&gid=')
-# mentor_matching_result_sheet_url = st.secrets["mentor_matching_result_sheet_url"].replace(
-#     '/edit?gid=', '/export?format=csv&gid=')
-
-# mentee_matching_stage2_sheet_url = st.secrets["mentee_matching_stage2_sheet_url"].replace(
-#     '/edit?gid=', '/export?format=csv&gid=')
-
-
-# mentees_table = pd.read_csv(mentee_matching_sheet_url)
-# mentors_table = pd.read_csv(
-#     mentor_matching_result_sheet_url, index_col="verification_code")
 mentors_table = pd.read_csv(
     mentor_matching_result_both_stage_sheet_url, index_col="verification_code")
 

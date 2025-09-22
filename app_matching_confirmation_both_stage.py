@@ -43,6 +43,7 @@ def load_mentee_data_stage1(mentee_name_list):
     mentee_response_df = pd.read_csv(mentee_response_sheet_url)
     mentee_response_df = mentee_response_df.dropna(how='all')
     mentee_response_df["中文姓名"] = mentee_response_df["中文姓名"].apply(lambda x: x.strip() if isinstance(x, str) else x)
+    mentee_response_df["中文姓名"] = mentee_response_df["中文姓名"].apply(lambda x: x.replace(" ","") if isinstance(x, str) else x)
 
     
     mentee_response = mentee_response_df.loc[mentee_response_df["中文姓名"].isin(mentee_name_list)]
@@ -54,6 +55,7 @@ def load_mentee_data_stage2(mentee_name_list):
     mentee_response_df = pd.read_csv(mentee_response_stage2_sheet_url)
     mentee_response_df = mentee_response_df.dropna(how='all')
     mentee_response_df["中文姓名"] = mentee_response_df["中文姓名"].apply(lambda x: x.strip() if isinstance(x, str) else x)
+    mentee_response_df["中文姓名"] = mentee_response_df["中文姓名"].apply(lambda x: x.replace(" ","") if isinstance(x, str) else x)
 
     mentee_response = mentee_response_df.loc[mentee_response_df["中文姓名"].isin(mentee_name_list)]
 
@@ -130,10 +132,10 @@ else:
 mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
 
 mentee_name_list_stage1 = mentors_table.loc[mentor_verification_code, ["mentee_name_MSc_s1",
-                                                           "mentee_name_PhD_s1",]].dropna().str.split().explode().tolist()
+                                                           "mentee_name_PhD_s1",]].dropna().str.split(" ").explode().tolist()
 
 mentee_name_list_stage2 = mentors_table.loc[mentor_verification_code, ["mentee_name_MSc_s2",
-                                                           "mentee_name_PhD_s2",]].dropna().str.split().explode().tolist()
+                                                           "mentee_name_PhD_s2",]].dropna().str.split(" ").explode().tolist()
 
 mentee_response_stage1 = load_mentee_data_stage1(mentee_name_list_stage1)
 mentee_response_stage2 = load_mentee_data_stage2(mentee_name_list_stage2)

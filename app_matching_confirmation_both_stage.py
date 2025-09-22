@@ -16,7 +16,7 @@ https://github.com/ChenHsieh/MMP_screening
 """
     }
 )
-st.title('Project TYRA - Mentor Dashboard 2025 Matching Confirmation (Stage 2)')
+st.title('Project TYRA - Mentor Dashboard 2025 Matching Confirmation (Both Stages)')
 
 st.markdown("""
 Thank you for participating as a mentor in the TYRA MMP 2025 program. This dashboard allows you to review the profiles of mentees who have matched with you during both the first and second stages of the matching process.

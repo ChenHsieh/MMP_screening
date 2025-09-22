@@ -16,10 +16,10 @@ https://github.com/ChenHsieh/MMP_screening
 """
     }
 )
-st.title('Project TYRA - Mentor Dashboard 2024 Matching Confirmation (Stage 2)')
+st.title('Project TYRA - Mentor Dashboard 2025 Matching Confirmation (Stage 2)')
 
 st.markdown("""
-Thank you for participating as a mentor in the TYRA MMP 2024 program. This dashboard allows you to review the profiles of mentees who have matched with you during both the first and second stages of the matching process.
+Thank you for participating as a mentor in the TYRA MMP 2025 program. This dashboard allows you to review the profiles of mentees who have matched with you during both the first and second stages of the matching process.
 """)
 
 st.markdown("""
@@ -34,53 +34,43 @@ mentee_response_sheet_url = st.secrets["mentee_response_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
 mentee_response_stage2_sheet_url = st.secrets["mentee_response_stage2_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
-mentee_matching_sheet_url = st.secrets["mentee_matching_sheet_url"].replace(
-    '/edit?gid=', '/export?format=csv&gid=')
-mentor_matching_result_sheet_url = st.secrets["mentor_matching_result_sheet_url"].replace(
-    '/edit?gid=', '/export?format=csv&gid=')
 mentor_matching_result_both_stage_sheet_url = st.secrets["mentor_matching_result_both_stage_sheet_url"].replace(
     '/edit?gid=', '/export?format=csv&gid=')
-mentee_matching_stage2_sheet_url = st.secrets["mentee_matching_stage2_sheet_url"].replace(
-    '/edit?gid=', '/export?format=csv&gid=')
 
 
-mentees_table = pd.read_csv(mentee_matching_sheet_url)
+# mentee_matching_sheet_url = st.secrets["mentee_matching_sheet_url"].replace(
+#     '/edit?gid=', '/export?format=csv&gid=')
+# mentor_matching_result_sheet_url = st.secrets["mentor_matching_result_sheet_url"].replace(
+#     '/edit?gid=', '/export?format=csv&gid=')
+
+# mentee_matching_stage2_sheet_url = st.secrets["mentee_matching_stage2_sheet_url"].replace(
+#     '/edit?gid=', '/export?format=csv&gid=')
+
+
+# mentees_table = pd.read_csv(mentee_matching_sheet_url)
 # mentors_table = pd.read_csv(
 #     mentor_matching_result_sheet_url, index_col="verification_code")
 mentors_table = pd.read_csv(
-    mentor_matching_result_both_stage_sheet_url, index_col="verification_code2")
+    mentor_matching_result_both_stage_sheet_url, index_col="verification_code")
 
-def load_mentee_data_stage1(mentee_id_list):
+def load_mentee_data_stage1(mentee_name_list):
     mentee_response_df = pd.read_csv(mentee_response_sheet_url)
     mentee_response_df = mentee_response_df.dropna(how='all')
     mentee_response_df["中文姓名"] = mentee_response_df["中文姓名"].apply(lambda x: x.strip() if isinstance(x, str) else x)
 
-    mentee_matching_df = pd.read_csv(mentee_matching_sheet_url)
-
-    id_to_name = dict(zip(mentee_matching_df['mentee_id'], mentee_matching_df['name_mentee']))
-
-    # Convert the list of mentee IDs to mentee names
-    mentee_names = list(map(id_to_name.get, mentee_id_list))
     
-    mentee_response = mentee_response_df.loc[mentee_response_df["中文姓名"].isin(mentee_names)]
+    mentee_response = mentee_response_df.loc[mentee_response_df["中文姓名"].isin(mentee_name_list)]
     
     return mentee_response
 
 
-def load_mentee_data_stage2(mentee_id_list):
+def load_mentee_data_stage2(mentee_name_list):
     mentee_response_df = pd.read_csv(mentee_response_stage2_sheet_url)
     mentee_response_df = mentee_response_df.dropna(how='all')
     mentee_response_df["中文姓名"] = mentee_response_df["中文姓名"].apply(lambda x: x.strip() if isinstance(x, str) else x)
 
-    mentee_matching_df = pd.read_csv(mentee_matching_stage2_sheet_url)
+    mentee_response = mentee_response_df.loc[mentee_response_df["中文姓名"].isin(mentee_name_list)]
 
-    id_to_name = dict(zip(mentee_matching_df['mentee_id'], mentee_matching_df['name_mentee']))
-
-    # Convert the list of mentee IDs to mentee names
-    mentee_names = list(map(id_to_name.get, mentee_id_list))
-    
-    mentee_response = mentee_response_df.loc[mentee_response_df["中文姓名"].isin(mentee_names)]
-    
     return mentee_response
 
 def convert_df(df):
@@ -137,7 +127,7 @@ if (mentor_verification_code == ""):
     st.warning(
         f"The input is empty!")
     st.stop()
-elif ((mentor_verification_code in mentors_table["name"].values) | (mentor_verification_code in mentors_table["mentor_id"].values) |
+elif ((mentor_verification_code in mentors_table["name"].values) |
       (mentor_verification_code in mentors_table["combined_mentor_id"].values) | (mentor_verification_code in mentors_table["email"].values)):
     st.warning(
         f"Please input the verification code instead of personal information. Please check your verification code from the email we sent to you.")
@@ -153,14 +143,14 @@ else:
 
 mentor_name = mentors_table.loc[mentor_verification_code, "combined_mentor_id"]
 
-mentee_id_list_stage1 = mentors_table.loc[mentor_verification_code, ["s1: mentee_MSc",
-                                                           "s1: mentee_PhD",]].dropna().str.split().explode().tolist()
+mentee_name_list_stage1 = mentors_table.loc[mentor_verification_code, ["mentee_name_MSc_s1",
+                                                           "mentee_name_PhD_s1",]].dropna().str.split().explode().tolist()
 
-mentee_id_list_stage2 = mentors_table.loc[mentor_verification_code, ["s2: mentee_MSc",
-                                                           "s2: mentee_PhD",]].dropna().str.split().explode().tolist()
+mentee_name_list_stage2 = mentors_table.loc[mentor_verification_code, ["mentee_name_MSc_s2",
+                                                           "mentee_name_PhD_s2",]].dropna().str.split().explode().tolist()
 
-mentee_response_stage1 = load_mentee_data_stage1(mentee_id_list_stage1)
-mentee_response_stage2 = load_mentee_data_stage2(mentee_id_list_stage2)
+mentee_response_stage1 = load_mentee_data_stage1(mentee_name_list_stage1)
+mentee_response_stage2 = load_mentee_data_stage2(mentee_name_list_stage2)
 
 mentee_names_stage1 = mentee_response_stage1["中文姓名"].values
 mentee_names_stage2 = mentee_response_stage2["中文姓名"].values

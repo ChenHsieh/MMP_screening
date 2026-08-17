@@ -1,3 +1,5 @@
+
+
 # Project TYRA MMP Mentor Dashboard
 
 This project uses Streamlit to facilitate the screening and matching process for the Mentor-Mentee Program (MMP) of Project TYRA.
@@ -40,7 +42,7 @@ This mentor dashboard was developed with the primary goal of securely delivering
 
 ### Phase 1: Initial Profile Review
 
-When mentors arrive at the webpage, they see clear instructions to get started. A unique verification code is sent to their email, which they must enter to access the dashboard. Once verified, mentors can:
+When mentors arrive at the webpage, they see clear instructions to get started. A unique, case-sensitive verification code is sent to their email, which they must enter to access the dashboard. Once verified, mentors can:
 
 * Download Data: Optionally download a CSV file containing the mentee information for offline access.
 
